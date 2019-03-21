@@ -41,19 +41,5 @@ api.add_resource(RideReplay,'/ride')
 
 
 
-users = [
-    {
-        "name":"Gayan",
-        "age": 30,
-        "occupation": "software engineer"
-    },
-    {
-        "name":"Supun",
-        "age": 32,
-        "occupation":"Doctor"
-    }
-]
-
-
 
 

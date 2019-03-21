@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t gayanlggd/taxi_ride_requests -f Dockerfile .
+
+script:
+  - docker run gayanlggd/taxi_ride_requests
+
+deploy:
+  provider: elasticbeanstalk
+  region: us-east-1
+  app: "taxi_ride_requests"
+  env: "taxi_ride_requests-env"
+  bucket_name: "elasticbeanstalk-us-east-1-052470063964"
+  bucket_path: "taxi_ride_requests"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
