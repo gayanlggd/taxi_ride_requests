@@ -11,10 +11,10 @@ script:
 deploy:
   provider: elasticbeanstalk
   region: us-east-1
-  app: "taxi_ride_requests"
+  app: "taxi-ride-requests"
   env: "TaxiRideRequests-env"
   bucket_name: "elasticbeanstalk-us-east-1-052470063964"
-  bucket_path: "taxi_ride_requests"
+  bucket_path: "taxi-ride-requests"
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY
