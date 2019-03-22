@@ -5,6 +5,8 @@ services:
 before_install:
   - docker build -t gayanlggd/taxi_ride_requests -f Dockerfile .
 
+script: pytest
+
 deploy:
   provider: elasticbeanstalk
   region: us-east-1
