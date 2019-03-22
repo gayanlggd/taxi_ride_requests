@@ -6,9 +6,9 @@ app = Flask(__name__)
 api = Api(app)
 
 mydb = mysql.connector.connect(
-  host="172.20.10.2",
-  user="cca498mysql",
-  passwd="cca498dbpass",
+  host="cca498db.csntci1mpxkj.us-east-1.rds.amazonaws.com",
+  user="cca498",
+  passwd="cca498pass",
   database="yellow_tripdata"
 )
 

@@ -5,14 +5,11 @@ services:
 before_install:
   - docker build -t gayanlggd/taxi_ride_requests -f Dockerfile .
 
-script:
-  - docker run gayanlggd/taxi_ride_requests
-
 deploy:
   provider: elasticbeanstalk
   region: us-east-1
   app: "taxi_ride_requests"
-  env: "taxi_ride_requests-env"
+  env: "TaxiRideRequests-env"
   bucket_name: "elasticbeanstalk-us-east-1-052470063964"
   bucket_path: "taxi_ride_requests"
   on:
