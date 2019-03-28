@@ -42,7 +42,7 @@ class RideReplay(Resource):
 
         sql = "INSERT INTO yellow_tripdata_2018_12 (VendorID, tpep_pickup_datetime, tpep_dropoff_datetime , passenger_count, trip_distance, RatecodeID, "\
             "store_and_fwd_flag, PULocationID, DOLocationID, payment_type, fare_amount, extra, mta_tax, tip_amount, tolls_amount, "\
-            "improvement_surcharge, total_amount) VALUES (%d,%s,%s,%d,%f,%d,%s,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f)"
+            "improvement_surcharge, total_amount) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         val = (args["VendorID"],args["tpep_pickup_datetime"],args["tpep_dropoff_datetime"],args["passenger_count"],args["trip_distance"],args["RatecodeID"], \
             args["store_and_fwd_flag"],args["PULocationID"],args["DOLocationID"],args["payment_type"],args["fare_amount"],args["extra"],args["mta_tax"], \
             args["tip_amount"],args["tolls_amount"],args["improvement_surcharge"],args["total_amount"])
