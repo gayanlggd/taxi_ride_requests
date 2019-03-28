@@ -20,16 +20,17 @@ class Ride(Resource):
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument("pickup_datetime")
+        parser.add_argument("pickup_location")
+        parser.add_argument("dropoff_location")
         parser.add_argument("passenger_count")
-        parser.add_argument("trip_distance")
 
         args = parser.parse_args()
 
         sql = "SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime , passenger_count, trip_distance, RatecodeID, "\
             "store_and_fwd_flag, PULocationID, DOLocationID, payment_type, fare_amount, extra, mta_tax, tip_amount, tolls_amount, "\
             "improvement_surcharge, total_amount FROM yellow_tripdata_2018_12 WHERE tpep_pickup_datetime = %s AND "\
-            "passenger_count = %s AND trip_distance = %s"
-        val = (args["pickup_datetime"], args["passenger_count"], args["trip_distance"])
+            "PULocationID = %s AND DOLocationID = %s AND passenger_count = %s"
+        val = (args["pickup_datetime"], args["pickup_location"], args["dropoff_location"], args["passenger_count"])
         mycursor.execute(sql, val)
 
         ride = mycursor.fetchone()
