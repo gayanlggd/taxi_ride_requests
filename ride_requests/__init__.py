@@ -26,8 +26,8 @@ class Ride(Resource):
 
         args = parser.parse_args()
 
-        sql = "SELECT VendorID, DATE_FORMAT(tpep_pickup_datetime, '%d-%m-%Y %H:%i:%s'), "\
-            "DATE_FORMAT(tpep_dropoff_datetime, '%d-%m-%Y %H:%i:%s'), passenger_count, trip_distance, RatecodeID, "\
+        sql = "SELECT VendorID, DATE_FORMAT(tpep_pickup_datetime, '%%d-%%m-%%Y %%H:%%i:%%s'), "\
+            "DATE_FORMAT(tpep_dropoff_datetime, '%%d-%%m-%%Y %%H:%%i:%%s'), passenger_count, trip_distance, RatecodeID, "\
             "store_and_fwd_flag, PULocationID, DOLocationID, payment_type, fare_amount, extra, mta_tax, tip_amount, tolls_amount, "\
             "improvement_surcharge, total_amount FROM yellow_tripdata_2018_12 WHERE tpep_pickup_datetime = %s AND "\
             "PULocationID = %s AND DOLocationID = %s AND passenger_count = %s LIMIT 1"
