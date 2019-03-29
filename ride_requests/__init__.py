@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 import mysql.connector
@@ -38,8 +40,7 @@ class Ride(Resource):
             mycursor.close()
             return {'message': 'No rides available', 'args': args}, 200
 
-        ride[1] = str(ride[1])
-        ride[2] = str(ride[2])
+        ride = [str(col) for col in ride]
         ride_result = {
                         'message': 'Ride reserved',
                         'ride': ride
