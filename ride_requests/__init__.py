@@ -29,7 +29,7 @@ class Ride(Resource):
         sql = "SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime , passenger_count, trip_distance, RatecodeID, "\
             "store_and_fwd_flag, PULocationID, DOLocationID, payment_type, fare_amount, extra, mta_tax, tip_amount, tolls_amount, "\
             "improvement_surcharge, total_amount FROM yellow_tripdata_2018_12 WHERE tpep_pickup_datetime = %s AND "\
-            "PULocationID = %s AND DOLocationID = %s AND passenger_count = %s"
+            "PULocationID = %s AND DOLocationID = %s AND passenger_count = %s LIMIT 1"
         val = (args["pickup_datetime"], args["pickup_location"], args["dropoff_location"], args["passenger_count"])
         mycursor.execute(sql, val)
 
