@@ -36,7 +36,7 @@ class Ride(Resource):
         ride = mycursor.fetchone()
         if not ride:
             mycursor.close()
-            return {'message': 'No rides available'}, 200
+            return {'message': 'No rides available', 'args': args}, 200
 
         ride_result = {
                         'message': 'Ride reserved',
