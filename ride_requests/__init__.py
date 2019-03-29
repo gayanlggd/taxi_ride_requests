@@ -12,12 +12,12 @@ mydb = mysql.connector.connect(
   database="yellow_tripdata"
 )
 
-mycursor = mydb.cursor()
-
 class Ride(Resource):
 
 
     def get(self):
+        mycursor = mydb.cursor()
+
         parser = reqparse.RequestParser()
         parser.add_argument("pickup_datetime")
         parser.add_argument("pickup_location")
@@ -35,6 +35,7 @@ class Ride(Resource):
 
         ride = mycursor.fetchone()
         if not ride:
+            mycursor.close()
             return {'message': 'No rides available'}, 200
 
         ride_result = {
@@ -42,9 +43,12 @@ class Ride(Resource):
                         'ride': ride
                       }
 
+        mycursor.close()
         return ride_result, 200
 
     def post(self):
+        mycursor = mydb.cursor()
+
         parser = reqparse.RequestParser()
         parser.add_argument("VendorID")
         parser.add_argument("tpep_pickup_datetime")
@@ -77,6 +81,7 @@ class Ride(Resource):
         mydb.commit()
 
         print(mycursor.rowcount, "record inserted.")
+        mycursor.close()
         return {'message':'post success'}, 200
 
     def put(self):
