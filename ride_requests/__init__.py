@@ -7,17 +7,16 @@ import mysql.connector
 app = Flask(__name__)
 api = Api(app)
 
-mydb = mysql.connector.connect(
-  host="cca498db.csntci1mpxkj.us-east-1.rds.amazonaws.com",
-  user="cca498",
-  passwd="cca498pass",
-  database="yellow_tripdata"
-)
-
 class Ride(Resource):
 
 
     def get(self):
+        mydb = mysql.connector.connect(
+            host="cca498db.csntci1mpxkj.us-east-1.rds.amazonaws.com",
+            user="cca498",
+            passwd="cca498pass",
+            database="yellow_tripdata"
+        )
         mycursor = mydb.cursor()
 
         parser = reqparse.RequestParser()
@@ -50,6 +49,12 @@ class Ride(Resource):
         return ride_result, 200
 
     def post(self):
+        mydb = mysql.connector.connect(
+            host="cca498db.csntci1mpxkj.us-east-1.rds.amazonaws.com",
+            user="cca498",
+            passwd="cca498pass",
+            database="yellow_tripdata"
+        )
         mycursor = mydb.cursor()
 
         parser = reqparse.RequestParser()
