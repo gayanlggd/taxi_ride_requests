@@ -34,20 +34,20 @@ class Ride(Resource):
         cars = mycursor.fetchall()
 
         car_id, distance_away = self._find_closest_available_car(int(args['pickup_location']), int(args['dropoff_location']), cars)
-        total_distance = distance_away + abs(int(args['pickup_location'])-int(args['dropoff_location']))
-        next_available_at = datetime.now() + timedelta(seconds=total_distance/2)
-        next_location = int(args['dropoff_location'])
+        if car_id:
+            total_distance = distance_away + abs(int(args['pickup_location'])-int(args['dropoff_location']))
+            next_available_at = datetime.now() + timedelta(seconds=total_distance/2)
+            next_location = int(args['dropoff_location'])
 
-        update_sql = "UPDATE cars SET location = %s AND arrival = %s WHERE id = %s"
-        vals = (next_location, next_available_at, car_id)
-        mycursor.execute(update_sql, vals)
-        mydb.commit()
+            update_sql = "UPDATE cars SET location = %s AND arrival = %s WHERE id = %s"
+            vals = (next_location, next_available_at, car_id)
+            mycursor.execute(update_sql, vals)
+            mydb.commit()
+            mycursor.close()
+            return {'message': 'Ride reserved', 'ride': car_id, 'location': next_location, 'arrival': str(next_available_at)}, 200
 
         mycursor.close()
-        if not car_id:
-            return {'message': 'No rides available', 'args': args}, 200
-
-        return {'message': 'Ride reserved', 'ride': car_id}, 200
+        return {'message': 'No rides available', 'args': args}, 200
 
     def _find_closest_available_car(self, pickup_location, dropoff_location, cars):
         dt_format = '%Y-%m-%d %H:%M:%S'
