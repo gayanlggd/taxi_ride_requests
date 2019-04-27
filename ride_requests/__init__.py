@@ -53,8 +53,7 @@ class Ride(Resource):
         closest_car = None
         closest_distance = 9999999999
         for car in cars:
-            availability_time = datetime.strptime(car[2], dt_format)
-            if availability_time <= datetime.now() and abs(pickup_location-int(car[1])) < closest_distance:
+            if car[2] <= datetime.now() and abs(pickup_location-int(car[1])) < closest_distance:
                 closest_distance = abs(pickup_location-int(car[1]))
                 closest_car = int(car[0])
         return closest_car, closest_distance
