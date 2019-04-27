@@ -16,7 +16,8 @@ class Ride(Resource):
             host="cca498db.csntci1mpxkj.us-east-1.rds.amazonaws.com",
             user="cca498",
             passwd="cca498pass",
-            database="yellow_tripdata"
+            database="yellow_tripdata",
+            autocommit=True
         )
         mycursor = mydb.cursor()
 
@@ -40,11 +41,12 @@ class Ride(Resource):
             next_location = int(args['dropoff_location'])
 
             update_sql = "UPDATE cars SET location = %s AND arrival = %s WHERE id = %s"
-            vals = (next_location, next_available_at, car_id)
+            next_available_at.strftime('%Y-%m-%d %H:%M:%S')
+            vals = (next_location, next_available_at.strftime('%Y-%m-%d %H:%M:%S'), car_id)
             mycursor.execute(update_sql, vals)
             mydb.commit()
             mycursor.close()
-            return {'message': 'Ride reserved', 'ride': car_id, 'location': next_location, 'arrival': str(next_available_at)}, 200
+            return {'message': 'Ride reserved', 'ride': car_id, 'location': next_location, 'arrival': next_available_at.strftime('%Y-%m-%d %H:%M:%S')}, 200
 
         mycursor.close()
         return {'message': 'No rides available', 'args': args}, 200
