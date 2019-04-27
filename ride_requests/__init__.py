@@ -41,6 +41,7 @@ class Ride(Resource):
         update_sql = "UPDATE cars SET location = %s AND arrival = %s WHERE id = %s"
         vals = (next_location, next_available_at, car_id)
         mycursor.execute(update_sql, vals)
+        mydb.commit()
 
         mycursor.close()
         if not car_id:
