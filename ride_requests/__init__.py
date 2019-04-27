@@ -1,4 +1,5 @@
-import datetime
+from datetime import datetime
+from datetime import timedelta
 
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
@@ -27,26 +28,36 @@ class Ride(Resource):
 
         args = parser.parse_args()
 
-        sql = "SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, passenger_count, trip_distance, RatecodeID, "\
-            "store_and_fwd_flag, PULocationID, DOLocationID, payment_type, fare_amount, extra, mta_tax, tip_amount, tolls_amount, "\
-            "improvement_surcharge, total_amount FROM yellow_tripdata_2018_12 WHERE tpep_pickup_datetime = %s AND "\
-            "PULocationID = %s AND DOLocationID = %s AND passenger_count = %s LIMIT 1"
-        val = (args["pickup_datetime"], args["pickup_location"], args["dropoff_location"], args["passenger_count"])
-        mycursor.execute(sql, val)
+        # Fetch all car data
+        sql = "SELECT id, location, arrival FROM cars"
+        mycursor.execute(sql)
+        cars = mycursor.fetchall()
 
-        ride = mycursor.fetchone()
-        if not ride:
-            mycursor.close()
-            return {'message': 'No rides available', 'args': args}, 200
+        car_id, distance_away = self._find_closest_available_car(int(args['pickup_location']), int(args['dropoff_location']), cars)
+        total_distance = distance_away + abs(int(args['pickup_location'])-int(args['dropoff_location']))
+        next_available_at = datetime.now() + timedelta(seconds=total_distance/2)
+        next_location = int(args['dropoff_location'])
 
-        ride = [str(col) for col in ride]
-        ride_result = {
-                        'message': 'Ride reserved',
-                        'ride': ride
-                      }
+        update_sql = "UPDATE cars SET location = %s AND arrival = %s WHERE id = %s"
+        vals = (next_location, next_available_at, car_id)
+        mycursor.execute(update_sql, vals)
 
         mycursor.close()
-        return ride_result, 200
+        if not car_id:
+            return {'message': 'No rides available', 'args': args}, 200
+
+        return {'message': 'Ride reserved', 'ride': car_id}, 200
+
+    def _find_closest_available_car(self, pickup_location, dropoff_location, cars):
+        dt_format = '%Y-%m-%d %H:%M:%S'
+        closest_car = None
+        closest_distance = 9999999999
+        for car in cars:
+            availability_time = datetime.strptime(car[2], dt_format)
+            if availability_time <= datetime.now() and abs(pickup_location-int(car[1])) < closest_distance:
+                closest_distance = abs(pickup_location-int(car[1]))
+                closest_car = int(car[0])
+        return closest_car, closest_distance
 
     def post(self):
         mydb = mysql.connector.connect(
