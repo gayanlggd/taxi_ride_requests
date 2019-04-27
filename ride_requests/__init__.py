@@ -37,10 +37,10 @@ class Ride(Resource):
         car_id, distance_away = self._find_closest_available_car(int(args['pickup_location']), int(args['dropoff_location']), cars)
         if car_id:
             total_distance = distance_away + abs(int(args['pickup_location'])-int(args['dropoff_location']))
-            next_available_at = datetime.now() + timedelta(seconds=total_distance/2)
+            next_available_at = datetime.utcnow() + timedelta(seconds=total_distance/2)
             next_location = int(args['dropoff_location'])
 
-            update_sql = "UPDATE cars SET location = %s AND arrival = %s WHERE id = %s"
+            update_sql = "UPDATE cars SET location = %s, arrival = %s WHERE id = %s"
             next_available_at.strftime('%Y-%m-%d %H:%M:%S')
             vals = (next_location, next_available_at.strftime('%Y-%m-%d %H:%M:%S'), car_id)
             mycursor.execute(update_sql, vals)
@@ -56,7 +56,7 @@ class Ride(Resource):
         closest_car = None
         closest_distance = 9999999999
         for car in cars:
-            if car[2] <= datetime.now() and abs(pickup_location-int(car[1])) < closest_distance:
+            if car[2] <= datetime.utcnow() and abs(pickup_location-int(car[1])) < closest_distance:
                 closest_distance = abs(pickup_location-int(car[1]))
                 closest_car = int(car[0])
         return closest_car, closest_distance
